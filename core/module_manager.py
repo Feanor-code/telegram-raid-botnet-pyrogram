@@ -22,7 +22,7 @@ class Manager:
             except Exception as error:
                 console.log("Error : {}".format(error), style="bold")
 
-    def get_functions(self, path: str) -> Generator[type[Any], Any, None]:
+    def get_functions(self, path: str) -> list[type[Any]]:
         return list(
             self.load_functions(
                 path, 
@@ -39,18 +39,18 @@ class Manager:
     ) -> None:
         sessions = list(range(10))
 
-        data = await function.ask()
+        data: tuple = await function.ask()
 
         if is_sync is not None:
             return await self._execute_async(sessions, function, data)
 
         await self._execute_sync(sessions, function, data)
 
-    async def _execute_sync(self, sessions: list, function, data: tuple) -> None:
+    async def _execute_sync(self, sessions: list, function: Any, data: tuple) -> None:
         for session in sessions:
             await self._execute(session, function, data)
 
-    async def _execute_async(self, sessions: list, function, data: tuple) -> None:
+    async def _execute_async(self, sessions: list, function: Any, data: tuple) -> None:
         await asyncio.gather(
             *[
                 self._execute(session, function, data)
@@ -58,10 +58,14 @@ class Manager:
             ]
         )
 
-    async def _execute(self, session: str, function, data: tuple) -> None:
+    async def _execute(self, session: str, function: Any, data: tuple) -> None:
         #запуск сессии
 
-        await function.execute(
+        if await function.execute(
             session,
             data
-        )
+        ):
+            pass
+            #await session.stop()
+
+
