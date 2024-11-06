@@ -25,6 +25,7 @@ console.print(
 print()
 
 def main():
+    session_settings.ask()
     functions = manager.get_functions("modules")
 
     console.print("[bold white]Accounts: {}".format(50))
