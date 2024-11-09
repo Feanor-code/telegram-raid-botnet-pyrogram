@@ -28,7 +28,18 @@ def main():
     session_settings.ask()
     functions = manager.get_functions("modules")
 
-    console.print("[bold white]Accounts: {}".format(50))
+    console.print(
+        "[bold white]Accounts: {}"
+        .format(
+            len(session_settings.sessions or session_settings.raw_sessions)
+        )
+    )
+
+    for session in session_settings.sessions:
+        try:
+            print(session)
+        except:
+            ...
 
     for index, function in enumerate(functions, 1):
         console.print(

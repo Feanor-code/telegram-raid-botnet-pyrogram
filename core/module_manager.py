@@ -34,7 +34,7 @@ class Manager:
 
     async def manage_tasks(
         self, 
-        function, 
+        function: Any, 
         is_sync: bool | None
     ) -> None:
         sessions = list(range(10))
@@ -52,10 +52,10 @@ class Manager:
 
     async def _execute_async(self, sessions: list, function: Any, data: tuple) -> None:
         await asyncio.gather(
-            *[
+            *(
                 self._execute(session, function, data)
                 for session in sessions
-            ]
+            )
         )
 
     async def _execute(self, session: str, function: Any, data: tuple) -> None:

@@ -12,7 +12,7 @@ class Flood:
     #вопросы пользователю
     async def ask(self) -> None:
         text = console.input(": ")
-        name = console.input("> ")
+        # name = console.input("> ")
 
         return (text, name)
 
