@@ -4,12 +4,12 @@ from sys import exit, platform
 from rich.console import Console
 
 from core.module_manager import Manager
-from utils.sessions_settings import SessionsSettings
+from utils.session_settings import SessionSettings
 
 
 console = Console()
 manager = Manager()
-session_settings = SessionsSettings("sessions")
+session_settings = SessionSettings()
 
 
 if platform == "win32":
@@ -24,14 +24,14 @@ console.print(
 
 print()
 
-def main():
-    session_settings.ask()
+async def get_function():
+    await session_settings.ask("sessions")
     functions = manager.get_functions("modules")
 
     console.print(
         "[bold white]Accounts: {}"
         .format(
-            len(session_settings.sessions or session_settings.raw_sessions)
+            len(session_settings.full_sessions or session_settings.raw_sessions)
         )
     )
 
@@ -44,25 +44,27 @@ def main():
     
     return functions[int(console.input("[bold white]> "))-1]
 
-
-while True:
-    try:
-        function = main()
-        is_sync = True if console.input("Async function? (y/n): ") == "y" else None
-        
-        asyncio.run(
-            manager.manage_tasks(
+async def main():
+    while True:
+        try:
+            function = await get_function()
+            is_sync = True if console.input("Async function? (y/n): ") == "y" else None
+            
+            await manager.manage_tasks(
                 function(),
-                is_sync
+                is_sync,
+                session_settings.full_sessions or session_settings.raw_sessions
             )
-        )
 
-    except KeyboardInterrupt:
-        console.print("\n<https://sower.space>")
-        exit()
+        except KeyboardInterrupt:
+            console.print("\n<https://sower.space>")
+            exit()
 
-    except Exception as error:
-        console.print(error)
+        except Exception as error:
+            console.print(error)
 
-    finally:
-        print("Done.")
+        finally:
+            print("Done.")
+
+
+asyncio.run(main())

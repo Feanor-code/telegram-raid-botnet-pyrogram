@@ -2,15 +2,18 @@ import asyncio
 import os
 import inspect
 import importlib.util
-from typing import Generator, Any
+from typing import Generator, Any, Dict
 
+from pyrogram import Client
 from rich.console import Console
+
+from utils.session_settings import SessionSettings
 
 
 console = Console()
 
 
-class Manager:
+class Manager(SessionSettings):
     def load_functions(self, path: str, functions: list) -> Generator[type[Any], Any, None]:
         for function in functions:
             try:
@@ -35,10 +38,9 @@ class Manager:
     async def manage_tasks(
         self, 
         function: Any, 
-        is_sync: bool | None
+        is_sync: bool | None,
+        sessions: Dict[str, Client]
     ) -> None:
-        sessions = list(range(10))
-
         data: tuple = await function.ask()
 
         if is_sync is not None:
@@ -46,26 +48,23 @@ class Manager:
 
         await self._execute_sync(sessions, function, data)
 
-    async def _execute_sync(self, sessions: list, function: Any, data: tuple) -> None:
-        for session in sessions:
+    async def _execute_sync(self, sessions: dict[str, Client], function: Any, data: tuple) -> None:
+        for session in sessions.values():
             await self._execute(session, function, data)
 
-    async def _execute_async(self, sessions: list, function: Any, data: tuple) -> None:
+    async def _execute_async(self, sessions: dict[str, Client], function: Any, data: tuple) -> None:
         await asyncio.gather(
             *(
                 self._execute(session, function, data)
-                for session in sessions
+                for session in sessions.values()
             )
         )
 
-    async def _execute(self, session: str, function: Any, data: tuple) -> None:
-        #запуск сессии
+    async def _execute(self, session: Client, function: Any, data: tuple) -> None:
+        session: Client = await self.launch(session)
 
         if await function.execute(
             session,
             data
         ):
-            pass
-            #await session.stop()
-
-
+            await session.stop()
