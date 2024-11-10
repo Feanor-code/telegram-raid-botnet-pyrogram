@@ -35,12 +35,6 @@ def main():
         )
     )
 
-    for session in session_settings.sessions:
-        try:
-            print(session)
-        except:
-            ...
-
     for index, function in enumerate(functions, 1):
         console.print(
             "[bold magenta][{}] [white]{}".format(index, function.__doc__)
