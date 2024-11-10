@@ -2,7 +2,7 @@ import asyncio
 import os
 import inspect
 import importlib.util
-from typing import Generator, Any, Dict
+from typing import Generator, Any
 
 from pyrogram import Client
 from rich.console import Console
@@ -39,7 +39,7 @@ class Manager(SessionSettings):
         self, 
         function: Any, 
         is_sync: bool | None,
-        sessions: Dict[str, Client]
+        sessions: dict[str, Client]
     ) -> None:
         data: tuple = await function.ask()
 

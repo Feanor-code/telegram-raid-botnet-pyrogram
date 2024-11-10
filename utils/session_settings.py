@@ -1,8 +1,6 @@
 import asyncio
 from dataclasses import dataclass, field
-from io import TextIOWrapper
 import json
-from typing import Generator, Any, List, Dict
 import os
 
 from pyrogram import Client
@@ -14,8 +12,8 @@ console = Console()
 
 @dataclass
 class SessionSettings:
-    raw_sessions: Dict[str, Client] = field(default_factory=dict)
-    full_sessions: Dict[str, Client] = field(default_factory=dict)
+    raw_sessions: dict[str, Client] = field(default_factory=dict)
+    full_sessions: dict[str, Client] = field(default_factory=dict)
 
     async def ask(self, path: str):
         for file in os.listdir(path):
@@ -62,7 +60,7 @@ class SessionSettings:
         try:
             await session.start()
         except ConnectionError:
-            return
+            return session
         
         except Exception as error:
             console.print(f"Session Path -> {session.name} [bold red]Error : {error}")
