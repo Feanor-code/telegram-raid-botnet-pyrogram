@@ -1,11 +1,14 @@
 import asyncio
-import os
 import inspect
 import importlib.util
+import os
+import time
+from itertools import islice
 from typing import Generator, Any
 
 from pyrogram import Client
 from rich.console import Console
+from rich.prompt import Prompt
 
 from utils.session_settings import SessionSettings
 
@@ -27,11 +30,13 @@ class Manager(SessionSettings):
 
     def get_functions(self, path: str) -> list[type[Any]]:
         return list(
-            self.load_functions(
-                path, 
-                sorted([
-                    file[:-3] for file in os.listdir(path) if file.endswith(".py")
-                ])
+            dict.fromkeys(
+                self.load_functions(
+                    path, 
+                    sorted([
+                        file[:-3] for file in os.listdir(path) if file.endswith(".py")
+                    ])
+                )
             )
         )
 
@@ -41,30 +46,43 @@ class Manager(SessionSettings):
         is_sync: bool | None,
         sessions: dict[str, Client]
     ) -> None:
-        data: tuple = await function.ask()
+        await function.ask()
+
+        accounts_count = int(Prompt.ask(
+            "[bold magenta]how many accounts to use?",
+            default=str(len(sessions))
+        ))
+        sessions = dict(islice(sessions.items(), accounts_count))
 
         if is_sync is not None:
-            return await self._execute_async(sessions, function, data)
+            return await self._execute_async(sessions, function)
 
-        await self._execute_sync(sessions, function, data)
+        await self._execute_sync(sessions, function)
 
-    async def _execute_sync(self, sessions: dict[str, Client], function: Any, data: tuple) -> None:
+    async def _execute_sync(self, sessions: dict[str, Client], function: Any) -> None:
         for session in sessions.values():
-            await self._execute(session, function, data)
+            await self._execute(session, function)
 
-    async def _execute_async(self, sessions: dict[str, Client], function: Any, data: tuple) -> None:
-        await asyncio.gather(
-            *(
-                self._execute(session, function, data)
-                for session in sessions.values()
-            )
+    async def _execute_async(self, sessions: dict[str, Client], function: Any) -> None:
+        start_time = time.perf_counter()
+        
+        await asyncio.gather(*[
+            self._execute(session, function)
+            for session in sessions.values()
+        ])
+
+        end_time = round(time.perf_counter() - start_time, 2)
+        
+        console.print(
+            "[*] {used} bots used. Time: [yellow]{last_time}[/]s"
+            .format(used=len(sessions), last_time=end_time)
         )
 
-    async def _execute(self, session: Client, function: Any, data: tuple) -> None:
+    async def _execute(self, session: Client, function: Any) -> None:
         session: Client = await self.launch(session)
 
-        if await function.execute(
-            session,
-            data
-        ):
-            await session.stop()
+        if session is None:
+            return
+
+        await function.execute(session)
+        await session.stop()
