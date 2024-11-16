@@ -1,5 +1,6 @@
-from pyrogram import Client
+from typing import Literal
 
+from pyrogram import Client
 from rich.console import Console
 
 
@@ -9,7 +10,7 @@ console = Console()
 class LeaveChat:
     """Leave the chat"""
 
-    async def ask(self) -> None:
+    async def ask(self) -> (Literal[True] | None):
         if console.input("[bold red]Are you sure? (y/n): ") != "y":
             return True
         

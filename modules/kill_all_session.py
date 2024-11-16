@@ -1,3 +1,5 @@
+from typing import Literal
+
 from pyrogram import Client
 from pyrogram.raw import functions
 from pyrogram.errors import HashInvalid
@@ -11,7 +13,7 @@ console = Console()
 class ResetAuth:
     """Killed all account sessions"""
 
-    async def ask(self) -> None:
+    async def ask(self) -> (Literal[True] | None):
         if console.input("[bold red]Are you sure? (y/n): ") != "y":
             return True
 
