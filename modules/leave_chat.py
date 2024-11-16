@@ -1,5 +1,4 @@
 from pyrogram import Client
-from pyrogram.errors import PeerIdInvalid, ChannelPrivate
 
 from rich.console import Console
 
