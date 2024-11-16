@@ -1,4 +1,5 @@
 import asyncio
+import os
 import random
 from typing import Awaitable
 
@@ -24,6 +25,8 @@ class Flood(BaseFunction, Settings):
         )
 
     async def ask(self) -> tuple:
+        print()
+
         for index, function in enumerate(self.choices, 1):
             console.print(
                 "[bold white][{index}] {name}"
@@ -31,30 +34,39 @@ class Flood(BaseFunction, Settings):
             )
         self.mode = self.choices[int(console.input("[bold]> "))-1][1]
 
+        print()
+
         self.link = await self.change_link(
-            console.input("[bold red]link> ")
+            console.input("[bold red]link(or ID)> ")
         )
         self.delay = await self.delay_ask()
 
     async def flood_text(self, session: Client, chat_id: int) -> None:
         await session.send_message(chat_id, random.choice(self.messages))
 
-    async def flood_photo(self) -> None:
-        ...
+    async def flood_photo(self, session: Client, chat_id: int) -> None:
+        file = random.choice(os.listdir(os.path.join("resources", "photo")))
+
+        await session.send_photo(
+            chat_id,
+            os.path.join(
+                "resources", "photo", 
+                file
+            )
+        )
 
     async def flood(
         self, 
-        session: Client
+        session: Client,
+        me: dict,
+        chat_id: int
     ) -> None:
         successes = 0
         errors = 0
 
-        me = await session.get_me()
-        chat = await session.get_chat(self.link)
-
         while successes < self.message_count:
             try:
-                await self.mode(session, chat.id)
+                await self.mode(session, chat_id)
             except (FloodWait, SlowmodeWait) as wait:
                 wait = wait.value
 
@@ -74,11 +86,14 @@ class Flood(BaseFunction, Settings):
 
             finally:
                 if errors >= 3:
-                    return await session.leave_chat(chat.id, delete=True)
+                    return await session.leave_chat(chat._id, delete=True)
                 
                 await asyncio.sleep(random.randint(
                     *self.delay
                 ))
 
     async def execute(self, session: Client) -> None:
-        await self.flood(session)
+        me = await session.get_me()
+        chat = await session.get_chat(self.link)
+
+        await self.flood(session, me, chat.id)

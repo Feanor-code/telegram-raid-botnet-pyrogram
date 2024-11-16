@@ -3,6 +3,9 @@ from rich.prompt import Prompt
 
 class BaseFunction:
     async def change_link(self, link: str) -> str:
+        if link.isdigit():
+            return int(link)
+        
         if "/+" in link:
             return link
         

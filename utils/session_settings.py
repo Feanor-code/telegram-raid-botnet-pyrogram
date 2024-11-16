@@ -34,7 +34,8 @@ class SessionSettings:
                     api_hash=session_data["api_hash"],
                     device_model=session_data["device_model"],
                     app_version=session_data["app_version"],
-                    system_version=session_data["system_version"]
+                    system_version=session_data["system_version"],
+                    lang_code=session_data["lang_code"]
                 )
                 self.sessions[session.name] = session
 

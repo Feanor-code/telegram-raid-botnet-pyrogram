@@ -46,7 +46,8 @@ class Manager(SessionSettings):
         is_sync: bool | None,
         sessions: dict[str, Client]
     ) -> None:
-        await function.ask()
+        if await function.ask() == True:
+            return
 
         accounts_count = int(Prompt.ask(
             "[bold magenta]how many accounts to use?",
