@@ -37,8 +37,6 @@ class JoinChat(Flood):
         if self.is_flood:
             await super().ask()
     
-    async def parse_chat(self) -> None: pass
-
     async def join_chat(self, session: Client) -> None:
         try:
             if self.mode == "2":

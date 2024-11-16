@@ -41,7 +41,7 @@ async def get_function():
 
     for index, function in enumerate(functions, 1):
         console.print(
-            "[bold magenta][{}] [white]{}".format(index, function.__doc__)
+            "[bold white][{}] {}".format(index, function.__doc__)
         )
 
     print()

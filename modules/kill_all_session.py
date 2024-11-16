@@ -16,7 +16,6 @@ class ResetAuth:
             return True
 
     async def execute(self, session: Client) -> None:
-        me = await session.get_me()
         account = await session.invoke(functions.account.GetAuthorizations())
 
         for x in account.authorizations[::1]:
