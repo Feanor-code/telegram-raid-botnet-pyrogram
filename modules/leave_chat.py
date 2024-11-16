@@ -14,7 +14,6 @@ class LeaveChat:
             return True
         
     async def execute(self, session: Client) -> None:
-
         try:
             me = await session.get_me()
             async for dialog in session.get_dialogs():
