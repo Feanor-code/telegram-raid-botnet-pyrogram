@@ -86,7 +86,7 @@ class Flood(BaseFunction, Settings):
 
             finally:
                 if errors >= 3:
-                    return await session.leave_chat(chat._id, delete=True)
+                    return await session.leave_chat(chat_id, delete=True)
                 
                 await asyncio.sleep(random.randint(
                     *self.delay
