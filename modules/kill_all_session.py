@@ -1,10 +1,7 @@
-import sys
-
 from pyrogram import Client
-from pyrogram.raw import types, functions
+from pyrogram.raw import functions
 from pyrogram.errors import HashInvalid
 
-import asyncio
 from rich.console import Console
 
 
@@ -15,7 +12,7 @@ class ResetAuth:
     """Killed all account sessions"""
 
     async def ask(self) -> None:
-        if console.input("[bold red]You sure? (y/n): ") != "y":
+        if console.input("[bold red]Are you sure? (y/n): ") != "y":
             return True
 
     async def execute(self, session: Client) -> None:

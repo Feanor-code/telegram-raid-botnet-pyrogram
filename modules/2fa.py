@@ -1,5 +1,4 @@
 from pyrogram import Client
-import asyncio
 from rich.console import Console
 
 
