@@ -63,8 +63,7 @@ class Flood(BaseFunction, Settings):
 
             except Exception as error:
                 errors += 1
-                console.print("[bold red]Message not Sent. Error : {error}"
-                .format(error=error))
+                console.print(f"[bold red]Message not Sent. Error : {error}")
             
             else:
                 successes += 1
