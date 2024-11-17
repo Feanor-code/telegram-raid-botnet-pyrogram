@@ -5,6 +5,7 @@ import os
 import time
 from itertools import islice
 from typing import Generator, Any
+from multiprocessing import Process
 
 from pyrogram import Client
 from rich.console import Console
@@ -56,7 +57,12 @@ class Manager(SessionSettings):
         sessions = dict(islice(sessions.items(), accounts_count))
 
         if is_sync is not None:
-            return await self._execute_async(sessions, function)
+            await self._execute_async(sessions, function)
+            
+            if hasattr(function, "prt"):
+                function.prt()
+            
+            return
 
         await self._execute_sync(sessions, function)
 
@@ -77,7 +83,7 @@ class Manager(SessionSettings):
         console.print(
             "[*] {used} bots used. Time: [yellow]{last_time}[/]s"
             .format(used=len(sessions), last_time=end_time)
-        )
+        )   
 
     async def _execute(self, session: Client, function: Any) -> None:
         session: Client = await self.launch(session)

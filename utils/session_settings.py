@@ -56,7 +56,7 @@ class SessionSettings:
     async def launch(self, session: Client):
         try:
             await session.start()
-            console.log(session.name)
+            console.log(f"Session {session.name} connected")
         except ConnectionError:
             pass
         

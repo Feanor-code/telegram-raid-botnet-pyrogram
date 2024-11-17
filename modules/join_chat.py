@@ -3,6 +3,7 @@ import random
 
 from pyrogram import Client
 from pyrogram.errors.exceptions import UserAlreadyParticipant
+from pyrogram.types import Chat
 from rich.console import Console
 from rich.prompt import Confirm
 
@@ -35,17 +36,19 @@ class JoinChat(Flood):
         self.is_flood = Confirm.ask("[bold red]Flood after joining?")
         
         if self.is_flood:
-            await super().ask()
+            await super().ask(inside=True)
     
-    async def join_chat(self, session: Client) -> None:
+    async def join_chat(self, session: Client) -> (Chat | None):
         try:
             if self.mode == "2":
                 group = await session.get_chat(self.link)
-                return await session.join_chat(group.linked_chat.id)
+                peer = group.linked_chat.id
 
-            await session.join_chat(self.link)
+                return await session.join_chat(peer)
+
+            return await session.join_chat(self.link)
         except UserAlreadyParticipant:
-            pass
+            return await session.get_chat(self.link)
 
         except Exception as error:
             return console.print(f"Didn't join the chat. Error : {error}")
@@ -54,9 +57,11 @@ class JoinChat(Flood):
             await asyncio.sleep(random.randint(
                 *self.delay
             ))
+        
 
     async def execute(self, session: Client) -> None:
-        await self.join_chat(session)
+        chat = await self.join_chat(session)
+        me = await session.get_me()
 
         if self.is_flood:
-            await super().flood(session)
+            await super().flood(session, me, chat.id)

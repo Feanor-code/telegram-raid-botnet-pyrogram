@@ -24,7 +24,7 @@ class Flood(BaseFunction, Settings):
             ("Raid photo", self.flood_photo)
         )
 
-    async def ask(self) -> tuple:
+    async def ask(self, inside: bool | None = None) -> None:
         print()
 
         for index, function in enumerate(self.choices, 1):
@@ -36,9 +36,10 @@ class Flood(BaseFunction, Settings):
 
         print()
 
-        self.link = await self.change_link(
-            console.input("[bold red]link(or ID)> ")
-        )
+        if inside is None:
+            self.link = await self.change_link(
+                console.input("[bold red]link(or ID)> ")
+            )
         self.delay = await self.delay_ask()
 
     async def flood_text(self, session: Client, chat_id: int) -> None:
