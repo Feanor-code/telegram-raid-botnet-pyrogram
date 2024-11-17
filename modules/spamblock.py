@@ -33,7 +33,7 @@ class SpamBlock:
             )
         except BadRequest:
             await session.unblock_user(178220800)
-            await self.execute(session)
+            return await self.execute(session)
 
         await asyncio.sleep(1)
         me = await session.get_me()
@@ -49,13 +49,10 @@ class SpamBlock:
 
             if len(string) != 1:
                 date = re.findall(r"\d+\s\w+\s\d{4}", message.text)
-
                 if date:
                     result = date[0]
-
                 else:
                     result = "[bold red][-][/]"
-
             else:
                 result = "[bold green][+][/]"
 
