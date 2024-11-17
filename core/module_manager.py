@@ -5,7 +5,6 @@ import os
 import time
 from itertools import islice
 from typing import Generator, Any
-from multiprocessing import Process
 
 from pyrogram import Client
 from rich.console import Console
