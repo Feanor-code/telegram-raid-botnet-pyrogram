@@ -1,16 +1,16 @@
 import asyncio
+import random
 
 from pyrogram import Client
 from rich.console import Console
 
 from modules.base.base import BaseFunction
-from utils.session_settings import SessionSettings
-
+from utils.storage_settings import Settings
 
 console = Console()
 
 
-class FastFlood(SessionSettings, BaseFunction):
+class FastFlood(Settings, BaseFunction):
     """Fast flood"""
 
     async def ask(self) -> None:
@@ -20,7 +20,7 @@ class FastFlood(SessionSettings, BaseFunction):
 
     async def fast_flood(self, session: Client, chat_id: int) -> None:
         try:
-            await session.send_message(chat_id, "@yi_pedic_i_vse че в хуй скажешь? аллоооооо сын бляди")
+            await session.send_message(chat_id, random.choice(self.messages))
         except Exception as error:
             console.print(error)
 
@@ -30,7 +30,7 @@ class FastFlood(SessionSettings, BaseFunction):
 
             await asyncio.gather(*[
                 self.fast_flood(session, chat.id)
-                for _ in range(100)
+                for _ in range(self.message_count)
             ])
         except Exception as error:
             console.print(error)
