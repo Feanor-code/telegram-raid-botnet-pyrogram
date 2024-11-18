@@ -20,7 +20,6 @@ class BaseFunction:
             return
 
         if "-" not in self.raw_delay:
-            print(self.raw_delay, "asdfasdfads")
             return await asyncio.sleep(int(self.raw_delay))
         
         return await asyncio.sleep(
