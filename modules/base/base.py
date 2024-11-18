@@ -5,7 +5,7 @@ from rich.prompt import Prompt
 
 
 class BaseFunction:
-    async def change_link(self, link: str) -> str:
+    async def change_link(self, link: str) -> (int | str):
         if link.isdigit():
             return int(link)
         
@@ -14,7 +14,7 @@ class BaseFunction:
         
         return link.split("/")[-1]
     
-    async def delay(self, ask: bool | None = None) -> tuple:
+    async def delay(self, ask: bool | None = None) -> None:
         if ask is not None:
             self.raw_delay = Prompt.ask("[bold red]delay[/]", default="1-2")
             return
