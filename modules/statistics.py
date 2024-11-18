@@ -18,7 +18,7 @@ class Statistics:
         self.code = []
         self.country_list = {}
 
-    async def checking_number(self, session: Client) -> None:
+    async def check_number(self, session: Client) -> None:
         try:
             me = await session.get_me()
         except Exception as error:

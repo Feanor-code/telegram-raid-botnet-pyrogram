@@ -1,7 +1,6 @@
 import asyncio
 import os
 import random
-from typing import Awaitable
 
 from pyrogram import Client
 from pyrogram.errors.exceptions import FloodWait, SlowmodeWait

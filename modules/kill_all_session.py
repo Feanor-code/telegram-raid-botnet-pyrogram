@@ -11,7 +11,7 @@ console = Console()
 
 
 class ResetAuth:
-    """Killed all account sessions"""
+    """End all other sessions"""
 
     async def ask(self) -> (Literal[True] | None):
         if console.input("[bold red]Are you sure? (y/n): ") != "y":
@@ -28,7 +28,7 @@ class ResetAuth:
                 continue
 
             except Exception as error:
-                console.print("Error : {}".format(error), style="bold red")
+                console.print("Session not completed. Error : {}".format(error), style="bold white")
 
             else:
                 console.print(

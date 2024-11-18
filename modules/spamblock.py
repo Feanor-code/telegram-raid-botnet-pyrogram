@@ -27,6 +27,7 @@ class SpamBlock:
 
     async def execute(self, session: Client) -> None:
         try:
+            me = await session.get_me()
             await session.send_message(
                 "SpamBot",
                 "/start"
@@ -34,9 +35,11 @@ class SpamBlock:
         except BadRequest:
             await session.unblock_user(178220800)
             return await self.execute(session)
+        
+        except Exception as error:
+            return console.print(error)
 
         await asyncio.sleep(1)
-        me = await session.get_me()
 
         messages = session.get_chat_history("SpamBot", limit=1)
         message = [text async for text in messages][0]
