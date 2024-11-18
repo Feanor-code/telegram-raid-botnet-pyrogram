@@ -15,7 +15,7 @@ console = Console()
 class SessionSettings:
     sessions: dict[str, Client] = field(default_factory=dict)
 
-    async def ask(self, path: str):
+    async def ask(self, path: str) -> (bool | None):
         for file in os.listdir(path):
             if file.endswith(".session"):
                 session_path = os.path.join(path, file)
@@ -53,7 +53,7 @@ class SessionSettings:
         
         return is_sync
         
-    async def launch(self, session: Client):
+    async def launch(self, session: Client) -> (Client | None):
         try:
             await session.start()
             console.log(f"Session {session.name} connected")

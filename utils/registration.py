@@ -48,7 +48,7 @@ class Registration:
             names
         )
 
-    def setup_session(self) -> list:
+    def setup_session(self) -> list[str]:
         console.print(
             "Enter account names",
             style="bold red"
@@ -60,7 +60,7 @@ class Registration:
 
         return names
 
-    def setup_flood(self) -> tuple[str, int, list]:
+    def setup_flood(self) -> tuple[int, list]:
         message_count = int(console.input("[bold yellow]Number of messages> [/]"))
 
         print()
