@@ -13,6 +13,12 @@ console = Console()
 class FastFlood(Settings, BaseFunction):
     """Fast flood"""
 
+    def __init__(self) -> None:
+        super().__init__()
+        console.print(
+            "[bold red]Run this function Async. I do not recommend using less than 15 accounts."
+        )
+
     async def ask(self) -> None:
         self.link = await self.change_link(
             console.input("[bold red]link> ")
@@ -21,8 +27,8 @@ class FastFlood(Settings, BaseFunction):
     async def fast_flood(self, session: Client, chat_id: int) -> None:
         try:
             await session.send_message(chat_id, random.choice(self.messages))
-        except Exception as error:
-            console.print(error)
+        except Exception:
+            pass
 
     async def execute(self, session: Client) -> None:
         try:
@@ -33,4 +39,6 @@ class FastFlood(Settings, BaseFunction):
                 for _ in range(self.message_count)
             ])
         except Exception as error:
-            console.print(error)
+            return console.print(
+                f"Messages will not be sent. Error : {error}"
+            )

@@ -1,6 +1,7 @@
 import asyncio
 import os
 from sys import platform, exit
+from typing import Any
 
 from rich.console import Console
 
@@ -30,7 +31,7 @@ console.print(
 
 print()
 
-async def get_function():
+async def get_function() -> type[Any]:
     await session_settings.ask("sessions")
     functions = manager.get_functions("modules")
 
@@ -48,13 +49,12 @@ async def get_function():
     
     return functions[int(console.input("[bold white]> "))-1]
 
-async def main():
+async def main() -> None:
     function = await get_function()
-    is_sync = True if console.input("Async function? (y/n): ") == "y" else None
     
     await manager.manage_tasks(
         function(),
-        is_sync,
+        True if console.input("Async function? (y/n): ") == "y" else None,
         session_settings.sessions
     )
 

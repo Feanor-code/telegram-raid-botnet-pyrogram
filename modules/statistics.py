@@ -33,7 +33,7 @@ class Statistics:
         self.code.append(code_country)
 
     async def execute(self, session: Client) -> None:
-        await self.checking_number(session)
+        await self.check_number(session)
 
     def prt(self) -> None:
         print()
