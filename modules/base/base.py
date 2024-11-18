@@ -1,3 +1,6 @@
+import asyncio
+import random
+
 from rich.prompt import Prompt
 
 
@@ -11,6 +14,17 @@ class BaseFunction:
         
         return link.split("/")[-1]
     
-    async def delay_ask(self) -> tuple:
-        delay = Prompt.ask("[bold red]delay[/]", default="1-2")
-        return tuple(map(int, delay.split("-")))
+    async def delay(self, ask: bool | None = None) -> tuple:
+        if ask is not None:
+            self.raw_delay = Prompt.ask("[bold red]delay[/]", default="1-2")
+            return
+
+        if "-" not in self.raw_delay:
+            print(self.raw_delay, "asdfasdfads")
+            return await asyncio.sleep(int(self.raw_delay))
+        
+        return await asyncio.sleep(
+            random.randint(
+                *tuple(map(int, self.raw_delay.split("-")))
+            )
+        )

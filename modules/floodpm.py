@@ -16,7 +16,7 @@ class FloodMP(BaseFunction):
     async def ask(self) -> None:
         self.users = console.input("[bold red]USER: [/]")
         self.text_flood = console.input("[bold red]text> [/]")
-        self.delay = await self.delay_ask()        
+        await self.delay(ask=True)        
         
 
     async def execute(self, session: Client) -> None:
@@ -36,6 +36,4 @@ class FloodMP(BaseFunction):
                 console.print("Not sent. Error : %s" % error, style="bold white")
 
             finally:
-                await asyncio.sleep(random.randint(
-                    *self.delay
-                ))
+                await self.delay()

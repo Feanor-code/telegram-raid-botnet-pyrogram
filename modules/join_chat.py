@@ -32,7 +32,7 @@ class JoinChat(Flood):
         self.link = await self.change_link(
             console.input("[bold red]link> ")
         )
-        self.delay = await self.delay_ask()
+        await self.delay(ask=True)
         self.is_flood = Confirm.ask("[bold red]Flood after joining?")
         
         if self.is_flood:
@@ -54,9 +54,7 @@ class JoinChat(Flood):
             return console.print(f"Didn't join the chat. Error : {error}")
         
         finally:
-            await asyncio.sleep(random.randint(
-                *self.delay
-            ))
+            await self.delay()
         
 
     async def execute(self, session: Client) -> None:

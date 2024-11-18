@@ -40,7 +40,7 @@ class Flood(BaseFunction, Settings):
             self.link = await self.change_link(
                 console.input("[bold red]link(or ID)> ")
             )
-        self.delay = await self.delay_ask()
+        await self.delay(ask=True)
 
     async def flood_text(self, session: Client, chat_id: int) -> None:
         await session.send_message(chat_id, random.choice(self.messages))
@@ -89,9 +89,7 @@ class Flood(BaseFunction, Settings):
                 if errors >= 3:
                     return await session.leave_chat(chat_id, delete=True)
                 
-                await asyncio.sleep(random.randint(
-                    *self.delay
-                ))
+                await self.delay()
 
     async def execute(self, session: Client) -> None:
         me = await session.get_me()
