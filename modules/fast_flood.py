@@ -25,10 +25,11 @@ class FastFlood(Settings, BaseFunction):
         )
 
     async def fast_flood(self, session: Client, chat_id: int) -> None:
-        try:
-            await session.send_message(chat_id, random.choice(self.messages))
-        except Exception:
-            pass
+        for _ in range(self.message_count):
+            try:
+                await session.send_message(chat_id, random.choice(self.messages))
+            except Exception:
+                pass
 
     async def execute(self, session: Client) -> None:
         try:

@@ -55,7 +55,6 @@ class JoinChat(Flood):
         
         finally:
             await self.delay()
-        
 
     async def execute(self, session: Client) -> None:
         chat = await self.join_chat(session)

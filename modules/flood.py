@@ -91,7 +91,10 @@ class Flood(BaseFunction, Settings):
                 await self.delay()
 
     async def execute(self, session: Client) -> None:
-        me = await session.get_me()
-        chat = await session.get_chat(self.link)
-
+        try:
+            me = await session.get_me()
+            chat = await session.get_chat(self.link)
+        except Exception as error:
+            return console.print(f"Messages will not be sent. Error : {error}")
+        
         await self.flood(session, me, chat.id)

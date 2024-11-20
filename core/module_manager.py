@@ -85,7 +85,7 @@ class Manager(SessionSettings):
         )   
 
     async def _execute(self, session: Client, function: Any) -> None:
-        session: Client = await self.launch(session)
+        session: Client | None = await self.launch(session)
 
         if session is None:
             return
