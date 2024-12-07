@@ -57,6 +57,7 @@ async def main() -> None:
         True if console.input("Async function? (y/n): ") == "y" else None,
         session_settings.sessions
     )
+    await session_settings.stop_sessions()
 
 
 while True:

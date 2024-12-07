@@ -34,10 +34,8 @@ class ChangePhoto:
         )
             
     async def delete_photo(self, session: Client) -> None:
-        photos = [photo async for photo in session.get_chat_photos("me")]
-        await session.delete_profile_photos(
-            [photo.file_id for photo in photos[0:]]
-        )
+        async for photo in session.get_chat_photos("me"):
+            await session.delete_profile_photos(photo.file_id)
 
     async def execute(self, session: Client) -> None:
         choices = (

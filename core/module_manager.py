@@ -91,4 +91,3 @@ class Manager(SessionSettings):
             return
 
         await function.execute(session)
-        await session.stop()

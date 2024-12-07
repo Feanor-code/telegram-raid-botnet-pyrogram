@@ -67,3 +67,24 @@ class SessionSettings:
             return
 
         return session
+    
+    async def stop_sessions(self) -> None:
+        values = await asyncio.gather(*[
+            self.stop(session) 
+            for session in self.sessions.values()
+        ])
+        console.print(
+            "[*] {} Clients disabled."
+            .format(
+                len([value for value in values if value is not None])
+            )
+        )
+    
+    async def stop(self, session: Client) -> (Client | None):
+        try:
+            return await session.stop()
+        except Exception as error:
+            console.log(
+                f"The client has not disconnected. Error : {error}"
+            )
+            
