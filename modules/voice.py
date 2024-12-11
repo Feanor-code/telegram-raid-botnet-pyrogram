@@ -57,9 +57,9 @@ class Voice(BaseFunction):
         try:
             me = await session.get_me()
             chat = await session.get_chat(self.link)
+            
+            await self.voice_raid(session, me, chat.id)
         except Exception as error:
             return console.print(
                 f"Account will not join voice chat. Error : {error}"
             )
-        else:
-            await self.voice_raid(session, me, chat.id)

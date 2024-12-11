@@ -83,6 +83,8 @@ class SessionSettings:
     async def stop(self, session: Client) -> (Client | None):
         try:
             return await session.stop()
+        except ConnectionError:
+            pass
         except Exception as error:
             console.log(
                 f"The client has not disconnected. Error : {error}"
