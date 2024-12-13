@@ -29,9 +29,10 @@ class ChangePhoto:
             return True
 
     async def change_photo(self, session: Client) -> None:
-        await session.set_profile_photo(
-            photo=self.directory+random.choice(self.files)
-        )
+        photo = self.directory+random.choice(self.files)
+        
+        if await session.set_profile_photo(photo=photo):
+            return photo
             
     async def delete_photo(self, session: Client) -> None:
         async for photo in session.get_chat_photos("me"):
@@ -41,7 +42,7 @@ class ChangePhoto:
         choices = (
             (
                 self.change_photo, 
-                "[bold green][+][/] Photo updated. ({name})",
+                "[bold green][+][/] Photo updated. ({name}) [yellow]{path}",
                 "Photo not updated. Error : {error}"
             ),
             (
@@ -53,9 +54,12 @@ class ChangePhoto:
         try:
             me = await session.get_me()
             
-            await choices[self.choice][0](session)
+            path = await choices[self.choice][0](session)
             console.print(
-                choices[self.choice][1].format(name=me.first_name)
+                choices[self.choice][1].format(
+                    name=me.first_name,
+                    path=path
+                )
             )
         except Exception as error:
             console.print(choices[self.choice][2].format(error=error))
