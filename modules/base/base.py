@@ -1,7 +1,11 @@
 import asyncio
 import random
 
+from rich.console import Console
 from rich.prompt import Prompt
+
+
+console = Console()
 
 
 class BaseFunction:
@@ -13,6 +17,16 @@ class BaseFunction:
             return link
         
         return link.split("/")[-1]
+    
+    async def parse_message_id(self):
+        link = console.input("[bold red]link to messages> ").split("/")
+        group_id = link[-2]
+        post_id = int(link[-1])
+
+        if group_id.isdigit():
+            group_id = int(f"-100{group_id}")
+
+        return group_id, post_id
     
     async def delay(self, ask: bool | None = None) -> None:
         if ask is not None:
