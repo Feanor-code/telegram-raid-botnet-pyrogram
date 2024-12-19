@@ -1,5 +1,4 @@
 import git
-import requests
 import pip
 from rich.console import Console
 
@@ -19,10 +18,10 @@ def update():
                 "--quiet", 
                 "--break-system-packages"
             ])
-        except git.exc.GitCommandError:
-            console.print("[bold red]You may have made local changes to the files, you will have to manually update the script.")
+        except git.exc.GitCommandError as error:
+            console.print(error, style="yellow")
         except Exception as error:
-            console.log(error)
+            console.print(error, style="bold red")
 
 
 def get_commit():
@@ -37,5 +36,5 @@ def get_commit():
     if local_hash == server_hash:
         return console.print("The latest version is installed.")
     
-    if console.input("Update? (y/n): ") == "y":
+    if console.input("[*] Update? (y/n): ") == "y":
         update()
