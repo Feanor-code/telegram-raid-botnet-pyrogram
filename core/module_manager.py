@@ -11,12 +11,16 @@ from rich.console import Console
 from rich.prompt import Prompt
 
 from utils.session_settings import SessionSettings
+from utils.update import get_commit
 
 
 console = Console()
 
 
 class Manager(SessionSettings):
+    def __init__(self) -> None:
+        get_commit()
+
     def load_functions(self, path: str, functions: list) -> Generator[type[Any], Any, None]:
         for function in functions:
             try:
@@ -87,7 +91,5 @@ class Manager(SessionSettings):
     async def _execute(self, session: Client, function: Any) -> None:
         session: Client | None = await self.launch(session)
 
-        if session is None:
-            return
-
-        await function.execute(session)
+        if session is not None:
+            await function.execute(session)

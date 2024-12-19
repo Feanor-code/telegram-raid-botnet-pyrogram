@@ -9,6 +9,7 @@ path = "resources"
 
 if not os.path.exists(path):
     os.mkdir(path)
+    os.mkdir("sessions")
 
     folders = [
         "account_photo", 

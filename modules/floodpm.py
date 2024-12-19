@@ -17,7 +17,6 @@ class FloodMP(BaseFunction):
         self.users = console.input("[bold red]USER: [/]")
         self.text_flood = console.input("[bold red]text> [/]")
         await self.delay(ask=True)        
-        
 
     async def execute(self, session: Client) -> None:
         me = await session.get_me()

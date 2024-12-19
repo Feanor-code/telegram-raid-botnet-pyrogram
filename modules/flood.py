@@ -4,6 +4,7 @@ import random
 
 from pyrogram import Client
 from pyrogram.errors.exceptions import FloodWait, SlowmodeWait
+from pyrogram.types import User
 from rich.console import Console
 
 from modules.base.base import BaseFunction
@@ -58,7 +59,7 @@ class Flood(BaseFunction, Settings):
     async def flood(
         self, 
         session: Client,
-        me: dict,
+        me: User,
         chat_id: int
     ) -> None:
         successes = 0
@@ -94,7 +95,12 @@ class Flood(BaseFunction, Settings):
         try:
             me = await session.get_me()
             chat = await session.get_chat(self.link)
+
+            await self.flood(
+                session, 
+                me,
+                chat.id
+            )
         except Exception as error:
             return console.print(f"Messages will not be sent. Error : {error}")
         
-        await self.flood(session, me, chat.id)
