@@ -4,3 +4,4 @@ __pycache__
 *.jsession
 resources
 *.txt
+!requirements.txt
