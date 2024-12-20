@@ -1,8 +1,11 @@
 import git
 import pip
+
 from rich.console import Console
 
+
 console = Console()
+
 
 def update():
     with console.status("Update..."):
