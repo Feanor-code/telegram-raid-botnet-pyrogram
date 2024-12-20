@@ -18,10 +18,7 @@ class Voice(BaseFunction):
     """Voice chat raid"""
 
     async def ask(self) -> None:
-        self.link = await self.change_link(
-            console.input("[bold red]link(or ID)> ")
-        )
-
+        self.link = await self.change_link(console.input("[bold red]link(or ID)> "))
         files = os.listdir(os.path.join("resources", "voice"))
 
         if not files:

@@ -1,7 +1,5 @@
-import asyncio
-
 from pyrogram import Client
-from pyrogram.types import Poll, User
+from pyrogram.types import Poll
 from rich.console import Console
 
 from modules.base.base import BaseFunction
