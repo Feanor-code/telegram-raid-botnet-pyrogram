@@ -1,9 +1,7 @@
-import asyncio
 import random
 
 from pyrogram import Client
 from rich.console import Console
-from rich.prompt import Confirm
 
 from modules.base.base import BaseFunction 
 from utils.storage_settings import Settings
