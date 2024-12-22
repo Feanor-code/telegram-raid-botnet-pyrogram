@@ -45,16 +45,16 @@ async def get_function() -> type[Any]:
             "[bold magenta][{}][/] [bold white]{}".format(index, function.__doc__)
         )
 
-    print()
-    
+    print()    
     return functions[int(console.input("[bold white]> "))-1], initialized
+
 
 async def main() -> None:
     function, initialized = await get_function()
     
     await manager.manage_tasks(
         function(),
-        True if console.input("Async function? (y/n): ") == "y" else None,
+        True if console.input("[white]Async function? (y/n): ") == "y" else None,
         session_settings.sessions,
         initialized
     )

@@ -28,6 +28,12 @@ class BaseFunction:
 
         return group_id, post_id
     
+    def parse_comma_separated(self, text: str) -> list[str]:
+        list_text = console.input(text)
+
+        if list_text:
+            return list_text.split(",")
+    
     async def delay(self, ask: bool | None = None) -> None:
         if ask is not None:
             self.raw_delay = Prompt.ask("[bold red]delay[/]", default="1-2")
