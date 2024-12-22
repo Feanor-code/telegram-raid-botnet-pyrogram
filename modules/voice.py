@@ -1,4 +1,5 @@
 import os
+from typing import Literal
 
 from pytgcalls import PyTgCalls
 from pytgcalls import idle
@@ -17,19 +18,25 @@ console = Console()
 class Voice(BaseFunction):
     """Voice chat raid"""
 
-    async def ask(self) -> None:
-        self.link = await self.change_link(console.input("[bold red]link(or ID)> "))
-        files = os.listdir(os.path.join("resources", "voice"))
+    async def ask(self) -> (Literal[True] | None):
+        directory = os.path.join("resources", "voice")
+        files = os.listdir(directory)
 
         if not files:
-            return console.print("[bold red]Add video or audio!")
+            console.print(
+                "[bold red][!][/] Add video or audio.",
+                f"Path: [yellow]{directory}",
+                sep="\n"
+            )
+            return True
+
+        self.link = await self.change_link(console.input("[bold red]link(or ID)> "))
         
         for index, file in enumerate(files):
             console.print(
                 "[{index}] {name}"
                 .format(index=index+1, name=file)
             )
-
         self.media_file = files[int(console.input("[bold white]>> "))-1]
 
     async def voice_raid(self, session: Client, me: User, chat_id: int) -> None:

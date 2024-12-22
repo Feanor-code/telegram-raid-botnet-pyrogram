@@ -25,10 +25,14 @@ class ChangePhoto:
         self.choice = int(console.input("[bold]>> "))-1
 
         if self.choice == 0 and not self.files:
-            print("Add a photo for accounts.")
+            console.print(
+                "[bold red][!][/] Add a photo for accounts.",
+                f"Path: [yellow]{self.directory}",
+                sep="\n"
+            )
             return True
 
-    async def change_photo(self, session: Client) -> None:
+    async def change_photo(self, session: Client) -> (str | None):
         photo = self.directory+random.choice(self.files)
         
         if await session.set_profile_photo(photo=photo):

@@ -44,14 +44,14 @@ class SessionSettings:
                 "[bold red]You need to add sessions (Telegram accounts)"
             )
         
-        if is_sync := Prompt.ask("Initialize sessions?", choices=["y", "n"], default="n") == "y":
+        if initialized := Prompt.ask("Initialize sessions?", choices=["y", "n"], default="n") == "y":
             with console.status("Connection..."):
                 await asyncio.gather(*[
                     self.launch(session)
                     for session in self.sessions.values()
                 ])
-        
-        return is_sync
+
+        return initialized
         
     async def launch(self, session: Client) -> (Client | None):
         try:
@@ -73,6 +73,7 @@ class SessionSettings:
             self.stop(session) 
             for session in self.sessions.values()
         ])
+
         console.print(
             "[*] {} Clients disabled."
             .format(

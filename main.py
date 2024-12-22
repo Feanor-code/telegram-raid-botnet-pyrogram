@@ -23,8 +23,8 @@ if not os.path.exists("config.toml"):
     exit()
 
 console.print(
-    "GitHub botnet on pyrogram: https://github.com/Feanor-code/telegram-raid-botnet-pyrogram",
-    "GitHub botnet on telethon: https://github.com/json1c/telegram-raid-botnet",
+    "Pyrogram botnet: https://github.com/Feanor-code/telegram-raid-botnet-pyrogram",
+    "Telethon botnet: https://github.com/json1c/telegram-raid-botnet",
     sep="\n",
     style="bold white"
 )
@@ -32,7 +32,7 @@ console.print(
 print()
 
 async def get_function() -> type[Any]:
-    await session_settings.ask("sessions")
+    initialized = await session_settings.ask("sessions")
     functions = manager.get_functions("modules")
 
     console.print(
@@ -47,30 +47,28 @@ async def get_function() -> type[Any]:
 
     print()
     
-    return functions[int(console.input("[bold white]> "))-1]
+    return functions[int(console.input("[bold white]> "))-1], initialized
 
 async def main() -> None:
-    function = await get_function()
+    function, initialized = await get_function()
     
     await manager.manage_tasks(
         function(),
         True if console.input("Async function? (y/n): ") == "y" else None,
-        session_settings.sessions
+        session_settings.sessions,
+        initialized
     )
     await session_settings.stop_sessions()
 
 
 while True:
     loop = asyncio.get_event_loop()
-
     try:
         loop.run_until_complete(main())
     except KeyboardInterrupt:
         console.print("\n<https://sower.space>")
         break
-
     except Exception as error:
         console.print(error)
-
     finally:
         print("Done.")

@@ -48,8 +48,10 @@ class Manager(SessionSettings):
         self, 
         function: Any, 
         is_sync: bool | None,
-        sessions: dict[str, Client]
+        sessions: dict[str, Client],
+        initialized: bool
     ) -> None:
+        self.initialized = initialized
         if await function.ask() == True:
             return
 
@@ -89,7 +91,7 @@ class Manager(SessionSettings):
         )   
 
     async def _execute(self, session: Client, function: Any) -> None:
-        session: Client | None = await self.launch(session)
+        if not self.initialized:
+            session: Client | None = await self.launch(session)
 
-        if session is not None:
-            await function.execute(session)
+        await function.execute(session)
