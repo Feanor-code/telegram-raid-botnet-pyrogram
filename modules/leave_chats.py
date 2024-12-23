@@ -10,7 +10,7 @@ console = Console()
 
 
 class LeaveChat:
-    """Leave chat"""
+    """Leave chats"""
 
     async def ask(self) -> (Literal[True] | None):
         if console.input("[bold red]Are you sure? (y/n): ") != "y":

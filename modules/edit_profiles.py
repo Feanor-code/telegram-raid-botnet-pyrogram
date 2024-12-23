@@ -36,7 +36,7 @@ class EditProfile(BaseFunction, Settings):
                 return console.print(f"Failed to change account name. {session.name}")
             
             console.print(
-                "[*] First name {old_name} changed to {new_name}"
+                "[~] First name {old_name} changed to {new_name}"
                 .format(old_name=me.first_name, new_name=new_first_name)
             )
         except Exception as error:

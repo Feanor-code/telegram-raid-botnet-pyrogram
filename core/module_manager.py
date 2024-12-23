@@ -91,7 +91,7 @@ class Manager(SessionSettings):
         )   
 
     async def _execute(self, session: Client, function: Any) -> None:
-        if not self.initialized:
+        if not self.initialized or session.is_connected is None:
             session: Client | None = await self.launch(session)
-
+        
         await function.execute(session)

@@ -31,7 +31,7 @@ console.print(
 
 print()
 
-async def get_function() -> type[Any]:
+async def get_function() -> tuple[type[Any], bool | None]:
     initialized = await session_settings.ask("sessions")
     functions = manager.get_functions("modules")
 

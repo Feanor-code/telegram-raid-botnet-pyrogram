@@ -54,17 +54,15 @@ class SessionSettings:
         return initialized
         
     async def launch(self, session: Client) -> (Client | None):
-        try:
-            await session.start()
-            console.log(f"Session {session.name} connected")
-        except ConnectionError:
-            pass
-        
-        except Exception as error:
-            console.print(f"Session Path -> {session.name} [bold red]Error : {error}")
-            self.sessions.pop(session.name)
-            os.remove(session.name)
-            return
+        if session.is_connected is None:
+            try:
+                await session.start()
+                console.log(f"Session {session.name} connected")
+            except Exception as error:
+                console.print(f"Session Path -> {session.name} [bold red]Error : {error}")
+                self.sessions.pop(session.name)
+                os.remove(session.name)
+                return
 
         return session
     
@@ -82,12 +80,13 @@ class SessionSettings:
         )
     
     async def stop(self, session: Client) -> (Client | None):
-        try:
-            return await session.stop()
-        except ConnectionError:
-            pass
-        except Exception as error:
-            console.log(
-                f"The client has not disconnected. Error : {error}"
-            )
+        if session.is_connected is not None:
+            try:
+                return await session.stop()
+            except ConnectionError:
+                pass
+            except Exception as error:
+                console.log(
+                    f"The client has not disconnected. Error : {error}"
+                )
             
