@@ -4,6 +4,7 @@ import importlib.util
 import os
 import time
 from itertools import islice
+from sys import platform
 from typing import Generator, Any
 
 from pyrogram import Client
@@ -19,6 +20,9 @@ console = Console()
 
 class Manager(SessionSettings):
     def __init__(self) -> None:
+        if platform == "win32":
+            console.print("[bold red]The script will work with errors (use linux or WSL).")
+
         get_commit()
 
     def load_functions(self, path: str, functions: list) -> Generator[type[Any], Any, None]:
@@ -30,7 +34,7 @@ class Manager(SessionSettings):
                         yield classobj
 
             except Exception as error:
-                console.log("Error : {}".format(error), style="bold")
+                console.print(f"Module {function}.py not imported. Error : {error}")
 
     def get_functions(self, path: str) -> list[type[Any]]:
         return list(

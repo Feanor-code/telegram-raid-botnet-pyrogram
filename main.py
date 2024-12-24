@@ -1,6 +1,6 @@
 import asyncio
 import os
-from sys import platform, exit
+from sys import exit
 from typing import Any
 
 from rich.console import Console
@@ -14,9 +14,6 @@ console = Console()
 manager = Manager()
 session_settings = SessionSettings()
 
-
-if platform == "win32":
-    console.print("[bold red]The script will work with errors (use linux or WSL).")
 
 if not os.path.exists("config.toml"):
     Registration().get_settings()
